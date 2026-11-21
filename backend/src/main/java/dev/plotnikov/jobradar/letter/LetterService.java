@@ -61,9 +61,11 @@ public class LetterService {
             try {
                 PromptTemplate template = templates.findByCode("COVER_LETTER_" + lang)
                         .orElseThrow(() -> new IllegalStateException("Template COVER_LETTER_" + lang + " missing"));
-                String system = template.getBody() + "\n\nReturn only the letter text, without a subject line.\n\n"
-                        + "Candidate CV:\n" + resume;
-                body = claude.text(properties.ai().letterModel(), system, vacancyText(vacancy), "LETTER", vacancyId);
+                String system = template.getBody() + "\n\n<cv>\n" + resume + "\n</cv>";
+                body = clean(claude.text(properties.ai().letterModel(), system, userPrompt(vacancy), "LETTER", vacancyId));
+                if (body.isBlank()) {
+                    throw new IllegalStateException("AI returned an empty letter");
+                }
                 generatedBy = "AI";
             } catch (RuntimeException e) {
                 log.warn("AI letter failed: {} - using template", e.getMessage());
@@ -126,6 +128,37 @@ public class LetterService {
         return lang;
     }
 
+    static String userPrompt(Vacancy v) {
+        StringBuilder text = new StringBuilder("<vacancy>\n").append(vacancyText(v)).append("\n</vacancy>");
+        if (v.getMatchSummary() != null) {
+            text.append("\n\n<match_analysis>\nScore: ").append(v.getMatchScore()).append("/100\n")
+                    .append("Summary: ").append(v.getMatchSummary()).append('\n');
+            appendList(text, "Strengths", v.getMatchStrengths());
+            appendList(text, "Gaps", v.getMatchGaps());
+            if (v.getMatchAdvice() != null && !v.getMatchAdvice().isBlank()) {
+                text.append("Advice: ").append(v.getMatchAdvice()).append('\n');
+            }
+            text.append("</match_analysis>");
+        }
+        return text.toString();
+    }
+
+    private static void appendList(StringBuilder text, String title, String lines) {
+        if (lines == null || lines.isBlank()) {
+            return;
+        }
+        text.append(title).append(":\n");
+        for (String line : lines.split("\n")) {
+            if (!line.isBlank()) {
+                text.append("- ").append(line.trim()).append('\n');
+            }
+        }
+    }
+
+    static String clean(String letter) {
+        return letter.replace(" — ", " - ").replace("—", "-").replace("–", "-").trim();
+    }
+
     static String vacancyText(Vacancy v) {
         String description = v.getDescription();
         if (description.length() > 5000) {
@@ -140,16 +173,17 @@ public class LetterService {
             return """
                     Sehr geehrte Damen und Herren,
 
-                    mit großem Interesse habe ich Ihre Ausschreibung „%s“ bei %s gelesen. Als Student der Informatik \
-                    an der Universität Wien entwickle ich Backend-Anwendungen mit Java und Spring Boot und habe \
-                    mehrere Projekte mit PostgreSQL, REST-APIs und automatisierten Tests umgesetzt.
+                    für die Stelle „%s“ bei %s bringe ich Erfahrung mit Java, Spring Boot und PostgreSQL mit. Ich \
+                    studiere Informatik an der Universität Wien und habe fünf Projekte gebaut, die online laufen, \
+                    darunter eine Buchhaltung für drei Standorte und einen Purchase-to-Pay-Prozess mit \
+                    Freigaben nach Betrag, beide mit REST-API, Spring Security und automatisierten Tests.
 
-                    Vor dem Studium habe ich sechs Jahre lang Einkauf und IT in einem Unternehmen geleitet. Dadurch \
-                    verstehe ich, wie Software echte Geschäftsprozesse unterstützt, und arbeite strukturiert und \
-                    verlässlich. Ich spreche Deutsch (C1), Englisch (C2) und Russisch.
+                    Vor dem Studium habe ich sechs Jahre Einkauf und IT in einem Gastransportunternehmen geleitet. \
+                    Die Geschäftsprozesse hinter solcher Software kenne ich daher aus der Praxis. Ich spreche \
+                    Deutsch (C1), Englisch (C2) und Russisch.
 
-                    Neben dem Studium kann ich bis zu 20 Stunden pro Woche arbeiten. Über die Gelegenheit zu einem \
-                    Gespräch freue ich mich sehr.
+                    Neben dem Studium arbeite ich bis zu 20 Stunden pro Woche. Live-Demos und Quellcode finden Sie \
+                    unter https://boris-plotnikov.click. Über ein Gespräch freue ich mich.
 
                     Mit freundlichen Grüßen
                     Boris Plotnikov""".formatted(v.getTitle(), v.getCompany());
@@ -157,16 +191,17 @@ public class LetterService {
         return """
                 Dear Hiring Team,
 
-                I was glad to see the "%s" opening at %s. I study Computer Science at the University of Vienna and \
-                build backend applications with Java and Spring Boot; my portfolio includes several projects with \
-                PostgreSQL, REST APIs and automated tests.
+                For the "%s" position at %s I bring hands-on experience with Java, Spring Boot and PostgreSQL. \
+                I study Computer Science at the University of Vienna and have built five projects that run \
+                online, among them an accounting system for three offices and a purchase-to-pay workflow with \
+                approvals by amount, both with a REST API, Spring Security and automated tests.
 
-                Before university I led procurement and IT at a company for six years. This taught me how software \
-                supports real business processes and how to work in a structured, reliable way. I speak English \
-                (C2), German (C1) and Russian.
+                Before university I led procurement and IT at a gas transportation company for six years, so I \
+                know the business processes behind this kind of software from practice. I speak English (C2), \
+                German (C1) and Russian.
 
-                I can work up to 20 hours per week alongside my studies. I would be happy to talk about how I can \
-                help your team.
+                I can work up to 20 hours per week alongside my studies. Live demos and source code are at \
+                https://boris-plotnikov.click. I would be glad to talk.
 
                 Kind regards,
                 Boris Plotnikov""".formatted(v.getTitle(), v.getCompany());

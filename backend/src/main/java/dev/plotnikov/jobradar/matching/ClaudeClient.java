@@ -5,9 +5,12 @@ import com.anthropic.client.okhttp.AnthropicOkHttpClient;
 import com.anthropic.models.messages.CacheControlEphemeral;
 import com.anthropic.models.messages.Message;
 import com.anthropic.models.messages.MessageCreateParams;
+import com.anthropic.models.messages.OutputConfig;
+import com.anthropic.models.messages.StopReason;
 import com.anthropic.models.messages.StructuredMessage;
 import com.anthropic.models.messages.StructuredMessageCreateParams;
 import com.anthropic.models.messages.TextBlockParam;
+import com.anthropic.models.messages.ThinkingConfigAdaptive;
 import com.anthropic.models.messages.Usage;
 import dev.plotnikov.jobradar.config.JobRadarProperties;
 import java.time.Clock;
@@ -38,7 +41,7 @@ public class ClaudeClient {
         if (client == null) {
             client = AnthropicOkHttpClient.builder()
                     .apiKey(config.apiKey())
-                    .timeout(Duration.ofSeconds(90))
+                    .timeout(Duration.ofMinutes(3))
                     .maxRetries(2)
                     .build();
         }
@@ -67,13 +70,19 @@ public class ClaudeClient {
     public String text(String model, String systemPrompt, String userPrompt, String purpose, Long vacancyId) {
         MessageCreateParams params = MessageCreateParams.builder()
                 .model(model)
-                .maxTokens(4000L)
+                .maxTokens(16000L)
+                .thinking(ThinkingConfigAdaptive.builder().build())
+                .outputConfig(OutputConfig.builder().effort(OutputConfig.Effort.HIGH).build())
                 .systemOfTextBlockParams(cachedSystem(systemPrompt))
                 .addUserMessage(userPrompt)
                 .build();
         Instant start = Instant.now(clock);
         Message response = client().messages().create(params);
         record(model, response.usage(), purpose, vacancyId, start);
+        StopReason stop = response.stopReason().orElse(null);
+        if (StopReason.REFUSAL.equals(stop) || StopReason.MAX_TOKENS.equals(stop)) {
+            throw new IllegalStateException("AI stopped with " + stop);
+        }
         return response.content().stream()
                 .flatMap(block -> block.text().stream())
                 .map(textBlock -> textBlock.text())

@@ -25,7 +25,7 @@ Looking for a junior job means checking several job boards every day and reading
 | Matching | Claude Haiku, structured JSON output (`score`, `summary`, `strengths`, `gaps`, `advice`), validated before saving. Fallback: keyword scoring |
 | Cost control | Prompt caching of the CV, per-run AI limit, monthly budget, every call logged with tokens and cost |
 | Applications | Kanban Saved → Applied → Interview → Offer / Rejected, notes, follow-up reminder after 10 days |
-| Cover letters | Claude Sonnet, English or German, editable prompt templates in the database, version history |
+| Cover letters | Claude Sonnet with adaptive thinking, English or German. The prompt gets the CV, the vacancy, the match analysis (strengths and gaps) and verified portfolio facts; it picks the 2-3 key requirements and backs each with evidence. Editable templates in the database, version history, a plain template when AI is unavailable |
 | Insights | Skills, countries, work modes, languages, salaries, weekly trends, CV coverage |
 | Digest | Telegram message with the best new matches (optional) |
 | Showcase | Public read-only page for employers, with the AI request trace |
@@ -71,7 +71,7 @@ Open http://localhost:8101 - API docs at `/swagger-ui.html`. Or everything at on
 cd backend && mvn test
 ```
 
-39 tests: parsing of real API answers (saved fixtures), normalization, duplicates, prefilter rules, keyword scoring, validation of AI answers, cost calculation, the full pipeline with a fake source on H2, security (login, CSRF, private vs public API), applications and letters through the REST API.
+43 tests: parsing of real API answers (saved fixtures), normalization, duplicates, prefilter rules, keyword scoring, validation of AI answers, cost calculation, the full pipeline with a fake source on H2, security (login, CSRF, private vs public API), applications and letters through the REST API.
 
 ## Data and terms
 
