@@ -1,0 +1,147 @@
+{
+  "root": "../backend/src",
+  "flows": [
+    {
+      "id": "pipeline",
+      "title": "Daily pipeline",
+      "summary": "Every morning the scheduler collects jobs from open APIs, normalizes and deduplicates them, filters out irrelevant ones and scores the rest.",
+      "routes": ["/stats", "/showcase"],
+      "endpoints": ["POST /api/pipeline/run", "POST /api/pipeline/refilter", "GET /api/pipeline/runs", "GET /api/stats", "GET /api/public/summary"],
+      "steps": [
+        { "layer": "Scheduler", "file": "main/java/dev/plotnikov/jobradar/pipeline/PipelineScheduler.java", "symbol": "method:daily", "note": "Cron and time zone come from application.yml." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/pipeline/PipelineService.java", "symbol": "method:run", "note": "One run at a time; every run is stored with counters and a log." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/pipeline/PipelineService.java", "symbol": "method:fetchAndStore", "note": "A failing source is logged and skipped, the others continue." },
+        { "layer": "Source", "file": "main/java/dev/plotnikov/jobradar/source/ArbeitnowSource.java", "symbol": "method:parse", "note": "Each source maps its own JSON to one common RawJob record." },
+        { "layer": "Domain", "file": "main/java/dev/plotnikov/jobradar/vacancy/Normalizer.java", "symbol": "method:normalize", "note": "Country, city, work mode, language and skills." },
+        { "layer": "Domain", "file": "main/java/dev/plotnikov/jobradar/vacancy/Fingerprints.java", "symbol": "method:fingerprint", "note": "The same job posted on two boards gets the same fingerprint." },
+        { "layer": "Domain", "file": "main/java/dev/plotnikov/jobradar/matching/Prefilter.java", "symbol": "method:check", "note": "Cheap rules first, so the AI only sees relevant jobs." },
+        { "layer": "Test", "file": "test/java/dev/plotnikov/jobradar/pipeline/PipelineServiceTest.java", "symbol": "method:fullRunFiltersDeduplicatesAndScores", "note": "Full run against fake sources and an in-memory database." }
+      ]
+    },
+    {
+      "id": "ai",
+      "title": "AI match score",
+      "summary": "Claude compares each relevant job with the CV and must answer in a fixed JSON shape. The answer is validated, cost is recorded, and keywords take over when AI is unavailable.",
+      "routes": ["/vacancy", "/showcase"],
+      "endpoints": ["POST /api/vacancies/{id}/rescore", "GET /api/public/ai-trace"],
+      "steps": [
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/matching/MatchingService.java", "symbol": "method:scoreAndApply", "note": "AI when available and within budget, otherwise keywords." },
+        { "layer": "AI", "file": "main/java/dev/plotnikov/jobradar/matching/ClaudeMatchScorer.java", "symbol": "field:INSTRUCTIONS", "note": "Scoring rules sent as the system prompt, followed by the CV." },
+        { "layer": "AI", "file": "main/java/dev/plotnikov/jobradar/matching/ClaudeMatchScorer.java", "symbol": "method:userPrompt", "note": "The vacancy part of the prompt." },
+        { "layer": "Domain", "file": "main/java/dev/plotnikov/jobradar/matching/MatchResult.java", "symbol": "type:MatchResult", "note": "This record is the JSON schema of the answer, and its validation." },
+        { "layer": "AI client", "file": "main/java/dev/plotnikov/jobradar/matching/ClaudeClient.java", "symbol": "method:structured", "note": "Structured output with the official Java SDK." },
+        { "layer": "AI client", "file": "main/java/dev/plotnikov/jobradar/matching/ClaudeClient.java", "symbol": "method:cachedSystem", "note": "Prompt caching: the system prompt is the same for every job." },
+        { "layer": "AI client", "file": "main/java/dev/plotnikov/jobradar/matching/ClaudeClient.java", "symbol": "method:record", "note": "Tokens, cost and duration of every call." },
+        { "layer": "Domain", "file": "main/java/dev/plotnikov/jobradar/matching/AiPricing.java", "symbol": "method:cost", "note": "BigDecimal, never double, for money." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/matching/AiBudget.java", "symbol": "method:aiAvailable", "note": "Monthly spending limit." },
+        { "layer": "Test", "file": "test/java/dev/plotnikov/jobradar/matching/ScoringTest.java", "symbol": "method:aiAnswerIsValidated", "note": "A broken AI answer must not break the feed." }
+      ]
+    },
+    {
+      "id": "feed",
+      "title": "Feed with filters",
+      "summary": "The feed is one paged query built from optional filters with JPA Specifications.",
+      "routes": ["/feed"],
+      "endpoints": ["GET /api/vacancies", "GET /api/vacancies/filters", "GET /api/vacancies/{id}", "POST /api/vacancies/{id}/hide", "POST /api/vacancies/{id}/unhide"],
+      "steps": [
+        { "layer": "Controller", "file": "main/java/dev/plotnikov/jobradar/vacancy/VacancyController.java", "symbol": "method:feed", "note": "Query string is bound to a VacancyFilter record." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/vacancy/VacancyService.java", "symbol": "method:feed", "note": "Sorting and paging." },
+        { "layer": "Repository", "file": "main/java/dev/plotnikov/jobradar/vacancy/VacancySpecifications.java", "symbol": "method:fromFilter", "note": "Each filter adds one condition only when it is set." },
+        { "layer": "Repository", "file": "main/java/dev/plotnikov/jobradar/vacancy/VacancyRepository.java", "symbol": "type:VacancyRepository", "note": "Spring Data derives most queries from method names." },
+        { "layer": "Test", "file": "test/java/dev/plotnikov/jobradar/api/ApiFlowTest.java", "symbol": "method:feedFiltersAndInsights", "note": "HTTP-level test with MockMvc." }
+      ]
+    },
+    {
+      "id": "applications",
+      "title": "Application board",
+      "summary": "A kanban board of applications. Status changes go through the service, which keeps the dates of each stage.",
+      "routes": ["/applications"],
+      "endpoints": ["GET /api/applications", "POST /api/applications", "PATCH /api/applications/{id}", "DELETE /api/applications/{id}"],
+      "steps": [
+        { "layer": "Controller", "file": "main/java/dev/plotnikov/jobradar/application/ApplicationController.java", "symbol": "method:update", "note": "Status and notes in one PATCH request." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/application/ApplicationService.java", "symbol": "method:save", "note": "One application per vacancy." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/application/ApplicationService.java", "symbol": "method:move", "note": "Moving a card to another column." },
+        { "layer": "Domain", "file": "main/java/dev/plotnikov/jobradar/application/ApplicationStatus.java", "symbol": "type:ApplicationStatus", "note": "The columns of the board." },
+        { "layer": "Test", "file": "test/java/dev/plotnikov/jobradar/api/ApiFlowTest.java", "symbol": "method:applicationBoardFlow", "note": "Save, move and read back over HTTP." }
+      ]
+    },
+    {
+      "id": "letters",
+      "title": "Cover letters",
+      "summary": "A letter in English or German is drafted by Claude Sonnet. Every edit is a new version; without AI a template letter is used.",
+      "routes": ["/vacancy", "/settings"],
+      "endpoints": ["GET /api/vacancies/{id}/letters", "POST /api/vacancies/{id}/letters/generate", "POST /api/vacancies/{id}/letters", "GET /api/templates", "PUT /api/templates/{id}"],
+      "steps": [
+        { "layer": "Controller", "file": "main/java/dev/plotnikov/jobradar/letter/LetterController.java", "symbol": "method:generate", "note": "Language is validated on input." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/letter/LetterService.java", "symbol": "method:generate", "note": "AI first, template as fallback." },
+        { "layer": "AI client", "file": "main/java/dev/plotnikov/jobradar/matching/ClaudeClient.java", "symbol": "method:text", "note": "Free text answer, same caching and cost tracking." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/letter/LetterService.java", "symbol": "method:templateLetter", "note": "Works without any API key." },
+        { "layer": "Test", "file": "test/java/dev/plotnikov/jobradar/api/ApiFlowTest.java", "symbol": "method:letterWithoutAiUsesTemplateAndKeepsVersions", "note": "Versions are kept, nothing is overwritten." }
+      ]
+    },
+    {
+      "id": "insights",
+      "title": "Market insights",
+      "summary": "Aggregates over the last 30 days: directions, countries, skills in demand and which of them are in the CV.",
+      "routes": ["/insights", "/showcase"],
+      "endpoints": ["GET /api/insights", "GET /api/public/insights"],
+      "steps": [
+        { "layer": "Controller", "file": "main/java/dev/plotnikov/jobradar/insights/InsightsController.java", "symbol": "method:insights", "note": "Period in days as a query parameter." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/insights/InsightsService.java", "symbol": "method:insights", "note": "All charts from one list of vacancies." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/insights/InsightsService.java", "symbol": "method:countMany", "note": "Streams and groupingBy." },
+        { "layer": "DTO", "file": "main/java/dev/plotnikov/jobradar/insights/InsightsDtos.java", "symbol": "type:Insights", "note": "Records as response types." }
+      ]
+    },
+    {
+      "id": "security",
+      "title": "Login and security",
+      "summary": "Session login with BCrypt, CSRF protection with a cookie token, rate limiting of failed logins. Private endpoints return 401 without a session.",
+      "routes": ["/login"],
+      "endpoints": ["POST /api/auth/login", "POST /api/auth/logout", "GET /api/auth/me"],
+      "steps": [
+        { "layer": "Config", "file": "main/java/dev/plotnikov/jobradar/config/SecurityConfig.java", "symbol": "method:filterChain", "note": "Which URLs are public and how CSRF works." },
+        { "layer": "Controller", "file": "main/java/dev/plotnikov/jobradar/config/AuthController.java", "symbol": "method:login", "note": "Session is created only after a correct password." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/config/LoginRateLimiter.java", "symbol": "method:isBlocked", "note": "Too many failures from one IP block it for a while." },
+        { "layer": "Test", "file": "test/java/dev/plotnikov/jobradar/api/ApiFlowTest.java", "symbol": "method:privateApiNeedsLogin", "note": "" },
+        { "layer": "Test", "file": "test/java/dev/plotnikov/jobradar/api/ApiFlowTest.java", "symbol": "method:postWithoutCsrfTokenIsRejected", "note": "" }
+      ]
+    },
+    {
+      "id": "public",
+      "title": "Public API without personal data",
+      "summary": "The showcase is open to everyone, so it has its own endpoints that never return notes, letters, application statuses or the CV.",
+      "routes": ["/showcase"],
+      "endpoints": ["GET /api/public/feed", "GET /api/public/ai-trace"],
+      "steps": [
+        { "layer": "Controller", "file": "main/java/dev/plotnikov/jobradar/showcase/ShowcaseController.java", "symbol": "method:withoutPersonalData", "note": "Private fields are set to null before the response." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/showcase/AiTraceService.java", "symbol": "method:trace", "note": "Only jobs that are already public can be opened." },
+        { "layer": "Test", "file": "test/java/dev/plotnikov/jobradar/api/ApiFlowTest.java", "symbol": "method:showcaseIsPublicAndHidesPersonalData", "note": "" },
+        { "layer": "Test", "file": "test/java/dev/plotnikov/jobradar/api/ApiFlowTest.java", "symbol": "method:aiTraceIsPublicAndHidesCv", "note": "" }
+      ]
+    },
+    {
+      "id": "settings",
+      "title": "Search settings",
+      "summary": "CV, directions, countries and keywords. After a change, the last 30 days are filtered again with the new rules.",
+      "routes": ["/settings"],
+      "endpoints": ["GET /api/settings", "PUT /api/settings"],
+      "steps": [
+        { "layer": "Controller", "file": "main/java/dev/plotnikov/jobradar/settings/SettingsController.java", "symbol": "method:update", "note": "Bean Validation on the request body." },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/settings/SettingsService.java", "symbol": "method:update", "note": "" },
+        { "layer": "Service", "file": "main/java/dev/plotnikov/jobradar/pipeline/PipelineService.java", "symbol": "method:reapplyFilters", "note": "AI scores are kept to save money; keyword scores are recalculated." }
+      ]
+    },
+    {
+      "id": "database",
+      "title": "Database schema",
+      "summary": "PostgreSQL, changed only through Flyway migrations. Old migrations are never edited.",
+      "routes": [],
+      "endpoints": [],
+      "steps": [
+        { "layer": "SQL", "file": "main/resources/db/migration/V1__initial_schema.sql", "symbol": "sql:vacancies", "note": "The main table." },
+        { "layer": "SQL", "file": "main/resources/db/migration/V1__initial_schema.sql", "symbol": "sql:ai_usage", "note": "One row per AI call." },
+        { "layer": "SQL", "file": "main/resources/db/migration/V4__ai_usage_details.sql", "symbol": "file", "note": "A later change as a new migration." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+target/
+node_modules/
+dist/
+frontend/src/generated/
+backend/src/main/resources/static/
+.env
+*.env.local
+*.log
+logs/
+.idea/
+.vscode/
+*.iml

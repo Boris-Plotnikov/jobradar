@@ -1,0 +1,70 @@
+server:
+  port: ${PORT:8101}
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      timeout: 30d
+      cookie:
+        name: JOBRADAR_SESSION
+        http-only: true
+        same-site: lax
+
+spring:
+  application:
+    name: jobradar
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/jobradar}
+    username: ${DB_USER:jobradar}
+    password: ${DB_PASSWORD:jobradar}
+    hikari:
+      maximum-pool-size: 5
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        order_by.default_null_ordering: last
+  flyway:
+    enabled: true
+  jackson:
+    default-property-inclusion: non_null
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+jobradar:
+  owner:
+    username: ${OWNER_USERNAME:boris}
+    password: ${OWNER_PASSWORD:change-me}
+  timezone: Europe/Vienna
+  pipeline:
+    cron: ${PIPELINE_CRON:0 0 6 * * *}
+    enabled: ${PIPELINE_ENABLED:true}
+    max-ai-per-run: ${MAX_AI_PER_RUN:60}
+  ai:
+    api-key: ${ANTHROPIC_API_KEY:}
+    match-model: ${AI_MATCH_MODEL:claude-haiku-5-5}
+    letter-model: ${AI_LETTER_MODEL:claude-sonnet-5-5}
+    monthly-budget-usd: ${AI_MONTHLY_BUDGET_USD:5}
+  telegram:
+    bot-token: ${TELEGRAM_BOT_TOKEN:}
+    chat-id: ${TELEGRAM_CHAT_ID:}
+  public-url: ${PUBLIC_URL:http://localhost:8101}
+
+logging:
+  level:
+    dev.plotnikov.jobradar: INFO
+  file:
+    name: ${LOG_FILE:logs/jobradar.log}
+  logback:
+    rollingpolicy:
+      max-file-size: 5MB
+      max-history: 5

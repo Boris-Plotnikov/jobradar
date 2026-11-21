@@ -1,0 +1,71 @@
+{
+ "data": [
+  {
+   "slug": "senior-software-entwickler-in-finance-hanover-105038",
+   "company_name": "Polarstern Experts",
+   "title": "Senior Software Entwickler/in (m/w/d) - Finance",
+   "description": "<p>Als Senior Softwareentwickler/in (m/w/d) arbeitest Du insbesondere an individuellen Softwarelösungen für Kunden (Banken, Versicherungen und Handel).</p>\n<p>Für unseren neuen Standort in Hannover suchen wir erfahrene Entwickler-Persönlichkeiten, die nicht nur exzellenten Code schreiben, sondern auch Lust haben, einen neuen Standort von Grund auf mitaufzubauen.</p>\n<p>Wir arbeiten interdisziplinär für unsere Kunden daran, die individuell beste Lösung zu entwickeln. Respekt und Wertschätzung ist uns besonders wichtig. </p>\n<p>Neugierig? Dann melde dich gerne für weitere Informationen!</p>\n<h2>",
+   "remote": false,
+   "url": "https://www.arbeitnow.com/jobs/companies/polarstern-experts/senior-software-entwickler-in-finance-hanover-105038",
+   "tags": [
+    "Software Development"
+   ],
+   "job_types": [
+    "Unbefristeter arbeitsvertrag",
+    "berufserfahren"
+   ],
+   "location": "Hanover",
+   "created_at": 1794990662
+  },
+  {
+   "slug": "junior-sea-account-manager-kassel-19157",
+   "company_name": "Smarketer Group",
+   "title": "(Junior) SEA Account Manager (w/m/d)",
+   "description": "<p><strong>Du denkst analytisch, verstehst Zielgruppen und liebst Paid Search? Dann bist du bei uns richtig.</strong></p><h2>Deine Mission</h2><p>Als SEA Account Manager:in bist du operative:r bzw. strategische:r Ansprechpartner:in für Kund:innen. Dein Ziel: messbare Performance & Wachstum durch sauber konzipierte und optimierte Google-Ads-Kampagnen.<br>                    <br><strong>Dein Daily Business</strong></p><ul><li><p>Google Ads Kampagnen konzipieren, aufsetzen, optimieren</p></li><li><p>Potenziale identifizieren und mit dem Performance-Team Lösungen entwickeln</p></li><li><p>KPIs im ",
+   "remote": false,
+   "url": "https://www.arbeitnow.com/jobs/companies/smarketer-group/junior-sea-account-manager-kassel-19157",
+   "tags": [
+    "Online Marketing"
+   ],
+   "job_types": [
+    "Unbefristeter arbeitsvertrag",
+    "berufseinstieg"
+   ],
+   "location": "Kassel",
+   "created_at": 1794990662
+  },
+  {
+   "slug": "recruiter-osterode-am-harz-296433",
+   "company_name": "Talents by Jevin",
+   "title": "Recruiter (m/w/d)",
+   "description": "<h2>Über Talents by Jevin</h2><p>Wir haben den Talents gegründet, weil Bewerber zu oft wie Ware behandelt werden: anonym verschickt, ohne Rückmeldung, im Zweifel an den falschen Ansprechpartner. Bei uns läuft Recruiting transparent und mit Handschlagqualität.</p><h2>Ihre Aufgaben</h2><ul><li><p>Sie betreuen den gesamten Recruiting-Prozess für ausgewählte Mittelständler und Wachstumsunternehmen im festen Mandatsauftrag.</p></li><li><p>Sie führen Interviews, bewerten eingehende Bewerbungen und stehen Kandidaten transparent zur Seite.</p></li><li><p>Sie arbeiten eng mit den Geschäftsführern und T",
+   "remote": false,
+   "url": "https://www.arbeitnow.com/jobs/companies/talents-by-jevin/recruiter-osterode-am-harz-296433",
+   "tags": [
+    "Recruitment and Selection"
+   ],
+   "job_types": [
+    "Unbefristeter arbeitsvertrag",
+    "berufserfahren"
+   ],
+   "location": "Osterode am Harz",
+   "created_at": 1794990661
+  }
+ ],
+ "links": {
+  "first": "https://www.arbeitnow.com/api/job-board-api?page=1",
+  "last": null,
+  "prev": null,
+  "next": "https://www.arbeitnow.com/api/job-board-api?page=2"
+ },
+ "meta": {
+  "current_page": 1,
+  "current_page_url": "https://www.arbeitnow.com/api/job-board-api?page=1",
+  "from": 1,
+  "path": "https://www.arbeitnow.com/api/job-board-api",
+  "per_page": 300,
+  "to": 300,
+  "terms": "This is a free public API for jobs, please do not abuse. I would appreciate linking back to the site. By using the API, you agree to the terms of service present on Arbeitnow.com",
+  "info": "Jobs are updated every hour and order by the `created_at` timestamp. Use `?page=` to paginate. Read more information here: https://www.arbeitnow.com/blog/job-board-api"
+ }
+}

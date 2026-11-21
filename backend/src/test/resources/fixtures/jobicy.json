@@ -1,0 +1,64 @@
+{
+ "apiVersion": "2.2.19",
+ "documentationUrl": "https://jobi.cy/apidocs",
+ "friendlyNotice": "Thanks for using Jobicy API! Please ensure Jobicy is clearly credited with a direct link to the source, and all application buttons redirect to the original job URL provided in this feed. That’s all! You might be building something amazing, we wish you the best of luck!",
+ "jobCount": 50,
+ "lastUpdate": "2026-11-18T04:10:35+00:00",
+ "nextCursor": "AgAAAABq_XjaAAAAAGr4DLYAAAAAAAJ5LIgS2pwz6gLi5UB-GPnTxlf8B6ga0w2ZxGqltgs5ptZYVR_i5OJ9WWY_nFllAipN3xhiSb6pHuFOfjYU_mjg1rQ",
+ "hasMore": true,
+ "appliedFilters": {
+  "count": 50,
+  "geo": "europe",
+  "industry": "engineering"
+ },
+ "jobs": [
+  {
+   "id": 155731,
+   "url": "https://jobicy.com/jobs/155731-staff-software-engineer-python-java-spring-or-go",
+   "jobSlug": "155731-staff-software-engineer-python-java-spring-or-go",
+   "jobTitle": "Staff Software Engineer - Python, Java / Spring or Go",
+   "companyName": "Bloomreach",
+   "companyLogo": "https://jobicy.com/data/server-nyc0409/galaxy/mercury/2025/08/60790cd5-221.png",
+   "jobIndustry": [
+    "Software Engineering"
+   ],
+   "jobType": [
+    "Full-Time"
+   ],
+   "jobGeo": "Europe",
+   "jobLevel": "Senior",
+   "jobExcerpt": "Bloomreach is building the world’s premier agentic platform for personalization.We’re revolutionizing how businesses connect with their customers, building and deploying AI agents to personalize the entire customer journey. We're taking autonomous search mainstream, making product discovery more intuitive and conversational for customers, and more profitable for businesses. We’re making conversational shopping a reality, connecting every&hellip;",
+   "jobDescription": "<p>Bloomreach is building the world’s premier <strong>agentic platform for personalization</strong>.We’re revolutionizing how businesses connect with their customers, building and deploying AI agents to personalize the <strong><em>entire</em></strong> customer journey.</p>\n<ul>\n<li>We're taking <strong>autonomous search</strong> mainstream, making product discovery more intuitive and conversational for customers, and more profitable for businesses.</li>\n<li>We’re making <strong>conversational shopping</strong> a reality, connecting every shopper with tailored guidance and product expertise — a",
+   "pubDate": "2026-11-18T04:10:35+00:00",
+   "salaryMin": 49100,
+   "salaryMax": 61430,
+   "salaryCurrency": "EUR",
+   "salaryPeriod": "yearly"
+  },
+  {
+   "id": 155730,
+   "url": "https://jobicy.com/jobs/155730-senior-software-engineer-data-pipeline",
+   "jobSlug": "155730-senior-software-engineer-data-pipeline",
+   "jobTitle": "Senior Software Engineer, Data Pipeline",
+   "companyName": "Bloomreach",
+   "companyLogo": "https://jobicy.com/data/server-nyc0409/galaxy/mercury/2025/08/60790cd5-221.png",
+   "jobIndustry": [
+    "Software Engineering"
+   ],
+   "jobType": [
+    "Full-Time"
+   ],
+   "jobGeo": "Europe",
+   "jobLevel": "Senior",
+   "jobExcerpt": "Bloomreach is building the world’s premier agentic platform for personalization.We’re revolutionizing how businesses connect with their customers, building and deploying AI agents to personalize the entire customer journey. We're taking autonomous search mainstream, making product discovery more intuitive and conversational for customers, and more profitable for businesses. We’re making conversational shopping a reality, connecting every&hellip;",
+   "jobDescription": "<p>Bloomreach is building the world’s premier <strong>agentic platform for personalization</strong>.We’re revolutionizing how businesses connect with their customers, building and deploying AI agents to personalize the <strong><em>entire</em></strong> customer journey.</p>\n<ul>\n<li>We're taking <strong>autonomous search</strong> mainstream, making product discovery more intuitive and conversational for customers, and more profitable for businesses.</li>\n<li>We’re making <strong>conversational shopping</strong> a reality, connecting every shopper with tailored guidance and product expertise — a",
+   "pubDate": "2026-11-18T04:10:34+00:00",
+   "salaryMin": 1296000,
+   "salaryMax": 1620000,
+   "salaryCurrency": "CZK",
+   "salaryPeriod": "yearly"
+  }
+ ],
+ "statusCode": 200,
+ "success": true
+}
