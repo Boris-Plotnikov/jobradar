@@ -66,7 +66,7 @@ export default function AiInside() {
           onChange={(e) => setVacancyId(Number(e.target.value))}
         >
           {trace.candidates.map((c) => (
-            <option key={c.id} value={c.id}>{c.score} · {c.title} — {c.company}</option>
+            <option key={c.id} value={c.id}>{c.score} · {c.title} - {c.company}</option>
           ))}
         </select>
         <button onClick={() => openTour("ai")} className="text-sm font-medium text-brand hover:underline">
@@ -138,7 +138,7 @@ export default function AiInside() {
             <Figure label="Written to cache" value={trace.call.cacheWriteTokens.toLocaleString()} />
             <Figure label="Output tokens" value={trace.call.outputTokens.toLocaleString()} />
             <Figure label="Cost" value={usd(trace.call.costUsd)} />
-            <Figure label="Time" value={trace.call.durationMs != null ? `${(trace.call.durationMs / 1000).toFixed(1)} s` : "–"} />
+            <Figure label="Time" value={trace.call.durationMs != null ? `${(trace.call.durationMs / 1000).toFixed(1)} s` : "-"} />
           </div>
         ) : (
           <p className="text-xs text-muted">This job was scored before calls were logged per job; the averages below cover all jobs.</p>

@@ -6,8 +6,8 @@ Written by Boris Plotnikov as the task for the external frontend developer. The 
 
 - React 18 + TypeScript, Vite, Tailwind CSS, Recharts. No UI component library.
 - `HashRouter` and relative URLs (`base: "./"`): the app must work under any path and subdomain.
-- Build output goes to `backend/src/main/resources/static` — one JAR serves API and UI.
-- Colours only through CSS variables in `index.css` (brand, accent, ink, muted, surface) — the brand palette will change.
+- Build output goes to `backend/src/main/resources/static` - one JAR serves API and UI.
+- Colours only through CSS variables in `index.css` (brand, accent, ink, muted, surface) - the brand palette will change.
 - Every POST/PUT/PATCH/DELETE sends the CSRF token from the `XSRF-TOKEN` cookie in `X-XSRF-TOKEN`.
 - Errors from the API come as `{"error": "..."}` and must be shown to the user as they are.
 - Mobile first: everything usable at 375 px width.

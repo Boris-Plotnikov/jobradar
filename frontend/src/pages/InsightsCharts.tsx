@@ -12,13 +12,13 @@ export default function InsightsCharts({ data }: { data: Insights }) {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Vacancies analysed" value={data.totalVacancies.toLocaleString()} hint={`last ${data.days} days`} />
         <Stat label="Relevant for junior dev" value={data.relevantVacancies.toLocaleString()} hint={`${data.totalVacancies ? Math.round((100 * data.relevantVacancies) / data.totalVacancies) : 0}% passed the prefilter`} />
-        <Stat label="Average match" value={data.avgScore ? `${data.avgScore}%` : "–"} hint="of relevant vacancies" />
+        <Stat label="Average match" value={data.avgScore ? `${data.avgScore}%` : "-"} hint="of relevant vacancies" />
         <Stat label="Countries" value={data.countries.length} hint={data.countries.slice(0, 3).map((c) => c.name).join(", ")} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="card p-5">
-          <h3 className="mb-1 font-semibold">Most requested skills — relevant jobs</h3>
+          <h3 className="mb-1 font-semibold">Most requested skills - relevant jobs</h3>
           <p className="mb-3 text-xs text-muted">Share of junior / working student vacancies that mention the skill.</p>
           <ResponsiveContainer width="100%" height={340}>
             <BarChart data={data.topSkillsRelevant} layout="vertical" margin={{ left: 20 }}>
@@ -105,7 +105,7 @@ export default function InsightsCharts({ data }: { data: Insights }) {
         </div>
         <div className="card p-5">
           <h3 className="mb-3 font-semibold">Skill gaps to close</h3>
-          <p className="mb-3 text-xs text-muted">In-demand skills that are not in the CV yet — the most useful things to learn next.</p>
+          <p className="mb-3 text-xs text-muted">In-demand skills that are not in the CV yet - the most useful things to learn next.</p>
           <div className="flex flex-wrap gap-2">
             {data.cvCoverage.filter((c) => !c.inCv).map((c) => <Tag key={c.skill} tone="amber">{c.skill} · {c.demand}</Tag>)}
             {data.cvCoverage.every((c) => c.inCv) && <span className="text-sm text-muted">All top skills are covered.</span>}

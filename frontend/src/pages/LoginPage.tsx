@@ -44,7 +44,7 @@ export default function LoginPage({ onLogin }: { onLogin: (username: string) => 
           </Button>
         </form>
         <a href="#/showcase" className="mt-6 block rounded-xl border border-dashed border-brand/40 bg-white/60 p-4 text-center text-sm text-brand-dark hover:bg-white">
-          <b>Visitor?</b> Open the public showcase — live matches and market insights, no login needed →
+          <b>Visitor?</b> Open the public showcase - live matches and market insights, no login needed →
         </a>
       </div>
     </div>

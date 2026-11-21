@@ -63,7 +63,7 @@ export default function ApplicationsPage() {
         </div>
       )}
       {apps.length === 0 ? (
-        <Empty title="No applications yet">Save interesting vacancies from the feed with ☆ Save — they appear here.</Empty>
+        <Empty title="No applications yet">Save interesting vacancies from the feed with ☆ Save - they appear here.</Empty>
       ) : (
         <div className="grid gap-4 overflow-x-auto pb-4 md:grid-cols-5">
           {COLUMNS.map((col) => {
@@ -108,7 +108,7 @@ function AppCard({ app, onMove, onNotes, onRemove }: {
       className={`cursor-grab rounded-lg border bg-white p-3 shadow-sm active:cursor-grabbing ${app.needsFollowUp ? "border-amber-300" : "border-slate-200"}`}
     >
       <div className="flex items-start gap-2">
-        <span className={`rounded-md px-1.5 py-0.5 text-xs font-bold ${scoreColor(app.matchScore)}`}>{app.matchScore ?? "–"}</span>
+        <span className={`rounded-md px-1.5 py-0.5 text-xs font-bold ${scoreColor(app.matchScore)}`}>{app.matchScore ?? "-"}</span>
         <Link to={`/vacancy/${app.vacancyId}`} className="text-sm font-medium leading-snug hover:text-brand">{app.title}</Link>
       </div>
       <div className="mt-1 text-xs text-muted">{app.company}{app.country ? ` · ${app.country}` : ""}</div>

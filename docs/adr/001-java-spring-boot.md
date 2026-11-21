@@ -17,9 +17,9 @@ The service runs every day, calls several HTTP APIs, stores data in a relational
 
 ## Decision
 
-Java 21 with Spring Boot 3: Spring Web, Spring Data JPA, Spring Security, Bean Validation, `@Scheduled`. Plain classes and records, constructor injection, no Lombok — every line is explicit.
+Java 21 with Spring Boot 3: Spring Web, Spring Data JPA, Spring Security, Bean Validation, `@Scheduled`. Plain classes and records, constructor injection, no Lombok - every line is explicit.
 
 ## Consequences
 
 - One JAR contains API, scheduler and the built UI.
-- Memory ~250 MB with `-Xmx192m` — fits a small VPS together with other apps.
+- Memory ~250 MB with `-Xmx192m` - fits a small VPS together with other apps.

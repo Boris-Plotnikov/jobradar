@@ -94,7 +94,7 @@ export default function VacancyPage() {
               </div>
             </div>
             {v.matchAdvice && <div className="mt-4 rounded-lg bg-brand/5 p-3 text-sm"><b>Tip:</b> {v.matchAdvice}</div>}
-            <div className="mt-3 text-xs text-muted">{v.scoredBy === "AI" ? "Analysed by Claude (AI)." : "Keyword estimate — AI was not used for this vacancy."}</div>
+            <div className="mt-3 text-xs text-muted">{v.scoredBy === "AI" ? "Analysed by Claude (AI)." : "Keyword estimate - AI was not used for this vacancy."}</div>
           </div>
 
           <div className="card p-6">
@@ -153,7 +153,7 @@ function LetterPanel({ vacancyId, letters, defaultLanguage, onChange, showToast 
     setBusy(true);
     try {
       const letter = await api<CoverLetter>(`/api/vacancies/${vacancyId}/letters/generate`, { method: "POST", body: { language } });
-      showToast(letter.generatedBy === "AI" ? "Letter written by AI" : "AI is off — template letter created");
+      showToast(letter.generatedBy === "AI" ? "Letter written by AI" : "AI is off - template letter created");
       await onChange();
     } catch (e) {
       showToast((e as Error).message);

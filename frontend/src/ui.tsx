@@ -48,7 +48,7 @@ export function ScoreBadge({ score, by, large }: { score?: number; by?: string; 
         large ? "h-20 w-20 text-3xl" : "h-12 w-12 text-lg"
       }`}
     >
-      {score ?? "–"}
+      {score ?? "-"}
       <span className="text-[9px] font-semibold uppercase tracking-wide opacity-70">{by === "AI" ? "AI" : by ? "kw" : ""}</span>
     </div>
   );
@@ -72,7 +72,7 @@ export function workModeLabel(mode: WorkMode): string {
 export function salary(min?: number, max?: number, currency?: string): string | null {
   if (!min && !max) return null;
   const k = (n?: number) => (n ? `${Math.round(n / 1000)}k` : "?");
-  return `${k(min)}–${k(max)} ${currency ?? ""}`.trim();
+  return `${k(min)}-${k(max)} ${currency ?? ""}`.trim();
 }
 
 export function timeAgo(iso?: string): string {

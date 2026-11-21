@@ -17,7 +17,7 @@ One owner (job seeker). Visitors (employers) see a public showcase without perso
 3. **Irrelevant jobs filtered for free.** As the owner I want senior and foreign-country jobs dropped without AI cost.
    - Given the stop word "senior", when a title contains "Senior", then the vacancy is stored as rejected with the reason "Title contains stop word 'senior'" and is not sent to AI.
 4. **Explained score.** As the owner I want a score with strengths and gaps, so I can decide in seconds.
-   - Given an API key and budget, then the score comes from AI; without them from keywords — and the UI shows which.
+   - Given an API key and budget, then the score comes from AI; without them from keywords - and the UI shows which.
 5. **Budget control.** As the owner I want AI spending capped per month.
    - Given a monthly budget of 5 USD, when the sum of logged costs reaches it, then new scoring uses keywords until next month.
 6. **Applications board.** As the owner I want to track applications and get a reminder after 10 days without answer.

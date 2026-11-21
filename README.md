@@ -2,11 +2,11 @@
 
 Looking for a junior job means checking several job boards every day and reading hundreds of ads that do not fit. JobRadar does this automatically: every morning it collects new vacancies from open job APIs across Europe, drops the ones that clearly do not fit, scores the rest against my CV with AI and shows me the best matches with an explanation.
 
-**Live:** public showcase — https://boris-plotnikov.click/jobradar/#/showcase (no login; personal data is hidden)
+**Live:** public showcase - https://boris-plotnikov.click/jobradar/#/showcase (no login; personal data is hidden)
 
 ![CI](https://github.com/Boris-Plotnikov/jobradar/actions/workflows/ci.yml/badge.svg)
 
-## What you can see in 2 minutes
+## Quick tour
 
 1. Open the **showcase**: counters of the last 30 days, the best matches with scores, the five pipeline steps.
 2. **AI inside**: pick a job and see the exact prompt, the JSON schema the model must follow, its answer and what the call cost.
@@ -21,7 +21,7 @@ Looking for a junior job means checking several job boards every day and reading
 | Sources | Arbeitnow, Remotive, Jobicy, Himalayas: official public APIs, no keys. One class per source behind the `JobSource` interface |
 | Normalization | Country and city from free text, remote/hybrid/on-site, language of the ad (EN/DE), 40 technologies extracted |
 | Duplicates | Fingerprint of company + title + country, plus title similarity (Jaccard) within the same company |
-| Prefilter | Stop words (senior, lead…), "5+ years", countries, remote only, keywords — with a readable reason |
+| Prefilter | Stop words (senior, lead…), "5+ years", countries, remote only, keywords - with a readable reason |
 | Matching | Claude Haiku, structured JSON output (`score`, `summary`, `strengths`, `gaps`, `advice`), validated before saving. Fallback: keyword scoring |
 | Cost control | Prompt caching of the CV, per-run AI limit, monthly budget, every call logged with tokens and cost |
 | Applications | Kanban Saved → Applied → Interview → Offer / Rejected, notes, follow-up reminder after 10 days |
@@ -63,7 +63,7 @@ cd frontend && npm install && npm run build && cd ..
 cd backend && mvn spring-boot:run
 ```
 
-Open http://localhost:8101 — API docs at `/swagger-ui.html`. Or everything at once: `docker build -t jobradar .`
+Open http://localhost:8101 - API docs at `/swagger-ui.html`. Or everything at once: `docker build -t jobradar .`
 
 ## Tests
 
@@ -71,7 +71,7 @@ Open http://localhost:8101 — API docs at `/swagger-ui.html`. Or everything at 
 cd backend && mvn test
 ```
 
-34 tests: parsing of real API answers (saved fixtures), normalization, duplicates, prefilter rules, keyword scoring, validation of AI answers, cost calculation, the full pipeline with a fake source on H2, security (login, CSRF, private vs public API), applications and letters through the REST API.
+39 tests: parsing of real API answers (saved fixtures), normalization, duplicates, prefilter rules, keyword scoring, validation of AI answers, cost calculation, the full pipeline with a fake source on H2, security (login, CSRF, private vs public API), applications and letters through the REST API.
 
 ## Data and terms
 
@@ -80,3 +80,5 @@ Only official public APIs are used, no scraping of LinkedIn, StepStone or Indeed
 ## About
 
 Built by Boris Plotnikov. This is my real job search tool.
+
+AI tools were used to review code and speed up routine work. The design, the business rules and the tests are my own, and I can explain every part of the code.

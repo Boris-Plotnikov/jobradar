@@ -10,7 +10,7 @@ import { useFlows } from "../codetour/UnderTheHood";
 const STEPS = [
   { icon: "📥", title: "Collect", flow: "pipeline", text: "Every morning the service calls the open APIs of Arbeitnow, Remotive, Jobicy and Himalayas." },
   { icon: "🧹", title: "Normalize & dedupe", flow: "pipeline", text: "Country, city, work mode, language and skills are extracted; the same job from two sources is merged." },
-  { icon: "🔎", title: "Prefilter", flow: "pipeline", text: "Rules drop senior roles, wrong countries and other professions — no AI cost for them." },
+  { icon: "🔎", title: "Prefilter", flow: "pipeline", text: "Rules drop senior roles, wrong countries and other professions - no AI cost for them." },
   { icon: "🤖", title: "AI match", flow: "ai", text: "Claude Haiku compares each remaining job with the CV and returns a score, strengths and gaps as strict JSON." },
   { icon: "📬", title: "Act", flow: "applications", text: "Best matches go to Telegram; applications are tracked on a board; cover letters are drafted in English or German." },
 ];
@@ -73,18 +73,18 @@ export default function ShowcasePage() {
         </section>
 
         <section>
-          <h2 className="mb-1 text-xl font-bold">AI inside: one real request</h2>
+          <h2 className="mb-1 text-xl font-bold">Example of an AI request</h2>
           <p className="mb-4 text-sm text-muted">
-            The exact prompt, the answer schema, the answer and its cost for a job from the list below.
+            Prompt, answer schema, answer and cost for a job from the list below.
           </p>
           <AiInside />
         </section>
 
         <section>
-          <h2 className="mb-1 text-xl font-bold">Code tour</h2>
+          <h2 className="mb-1 text-xl font-bold">Source code by feature</h2>
           <p className="mb-4 text-sm text-muted">
-            How each feature is built, layer by layer: controller, service, repository and the test that checks it.
-            The snippets are the real source code, taken from the repository when the app is built.
+            Each feature by layer: controller, service, repository and test.
+            The snippets are extracted from the repository at build time.
           </p>
           {!flows ? <Spinner /> : (
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
@@ -126,7 +126,7 @@ export default function ShowcasePage() {
         </section>
 
         <footer className="border-t border-slate-200 pt-6 text-xs text-muted">
-          Job data: Arbeitnow, Remotive, Jobicy and <a href="https://himalayas.app" className="text-brand underline">Himalayas</a> — used via their public APIs with links to the original ads. No scraping of job boards.
+          Job data: Arbeitnow, Remotive, Jobicy and <a href="https://himalayas.app" className="text-brand underline">Himalayas</a> - used via their public APIs with links to the original ads. No scraping of job boards.
           {" "}<a href="./swagger-ui.html" className="text-brand underline">API documentation</a>
         </footer>
       </main>
